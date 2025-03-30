@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
+
+import UserList from "./Components/UserList";
 
 function App() {
-    const [message, setMessage] = useState("");
+    return (
+      <div>
+        <h1>My App</h1>
+        <UserList />
+      </div>
+    );
+  }
 
-    useEffect(() => {
-        fetch("http://localhost:8080/api/hello")
-            .then(response => response.text())
-            .then(data => setMessage(data));
-    }, []);
-
-    return <h1>{message}</h1>;
-}
 
 export default App;
