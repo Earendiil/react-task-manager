@@ -6,10 +6,7 @@ export const fetchUsers = async () => {
   return response.data;
 };
 
-export const addUser = async () => {
-    const response = await axiosClient.get("/user");
-    return response.data;
-}
+
 export const fetchUserById = async (userId) => {
     const response = await axiosClient.get(`/users/${userId}`);
     return response.data;
@@ -33,6 +30,6 @@ export const fetchUserById = async (userId) => {
   };
 
   export const getUserTasks = async (userId) => {
-    const response = await axiosClient.delete(`/users/${userId}/tasks`);
+    const response = await axiosClient.get(`/users/${userId}/tasks`);
     return response.data;
   };
