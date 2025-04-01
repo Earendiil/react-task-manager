@@ -1,31 +1,37 @@
 import { useEffect, useState } from "react";
-import { deleteUser, fetchUsers } from "../api/userApi";
+import { deleteUser, fetchUsers, updateUser } from "../api/userApi";
 import CreateUser from "./User/CreateUser";
+import UpdateUser from "./User/UpdateUser";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isCreatingUser, setIsCreatingUser] = useState(false);
+  const [updatingUserId, setUpdatingUserId] = useState(null); // New state for updating user
+  const [fetchTrigger, setFetchTrigger] = useState(0); // State to trigger re-fetch
+
+  const fetchAllUsers = async () => {
+    try {
+      const data = await fetchUsers();
+      console.log("Fetched users:", data); // Debug log
+      setUsers(data);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching users:", err); // Log errors
+      setError("Failed to load users");
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    fetchUsers()
-      .then((data) => {
-        console.log("Fetched users:", data); // Debug log
-        setUsers(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching users:", err); // Log errors
-        setError("Failed to load users");
-        setLoading(false);
-      });
-  }, []);
+    fetchAllUsers();
+  }, [fetchTrigger]); // Add fetchTrigger to the dependency array
 
   const handleDelete = async (userId) => {
     try {
       await deleteUser(userId);
-      setUsers((prevUsers) => prevUsers.filter((user) => user.userId !== userId));
+      setFetchTrigger(prev => prev + 1); // Increment fetchTrigger to trigger re-fetch
     } catch (error) {
       console.error("Error deleting user", error);
     }
@@ -36,12 +42,22 @@ const UserList = () => {
   };
 
   const handleUserCreated = (createdUser) => {
-    setUsers((prevUsers) => [...prevUsers, createdUser]);
+    setFetchTrigger(prev => prev + 1); // Increment fetchTrigger to trigger re-fetch
     setIsCreatingUser(false);
   };
 
   const handleCancel = () => {
     setIsCreatingUser(false);
+    setUpdatingUserId(null); // Reset updating user ID
+  };
+
+  const handleUpdateUser = (userId) => {
+    setUpdatingUserId(userId);
+  };
+
+  const handleUserUpdated = () => {
+    setFetchTrigger(prev => prev + 1); // Increment fetchTrigger to trigger re-fetch
+    setUpdatingUserId(null);
   };
 
   if (loading) return <p>Loading users...</p>;
@@ -53,7 +69,7 @@ const UserList = () => {
 
   return (
     <div className="container mx-auto p-4">
-      {!isCreatingUser ? (
+      {!isCreatingUser && !updatingUserId ? (
         <>
           <h2 className="text-2xl font-bold mb-4">User List</h2>
           <button
@@ -83,6 +99,12 @@ const UserList = () => {
                       <td className="px-4 py-2 border-b">{user.roles.map((role) => role.roleName).join(", ")}</td>
                       <td className="px-4 py-2 border-b">
                         <button 
+                          onClick={() => handleUpdateUser(user.userId)} 
+                          className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 mr-2"
+                        >
+                          Update
+                        </button>
+                        <button 
                           onClick={() => handleDelete(user.userId)} 
                           className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
                         >
@@ -100,9 +122,18 @@ const UserList = () => {
             </table>
           </div>
         </>
-      ) : (
+      ) : isCreatingUser ? (
         <CreateUser 
           setUsers={handleUserCreated} 
+          formClasses={formClasses} 
+          inputClasses={inputClasses} 
+          buttonClasses={buttonClasses} 
+          handleCancel={handleCancel} 
+        />
+      ) : (
+        <UpdateUser 
+          userId={updatingUserId} 
+          onUserUpdated={handleUserUpdated} 
           formClasses={formClasses} 
           inputClasses={inputClasses} 
           buttonClasses={buttonClasses} 
