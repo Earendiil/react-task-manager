@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchUsers } from "../api/userApi";
+import { deleteUser, fetchUsers } from "../api/userApi";
+import CreateUser from "./User/CreateUser";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -20,12 +21,21 @@ const UserList = () => {
       });
   }, []);
 
+  const handleDelete = async (userId) => {
+    try {
+      await deleteUser(userId);
+      setUsers((prevUsers) => prevUsers.filter((user) => user.userId !== userId));
+    } catch (error) {
+      console.error("Error deleting user", error);
+    }
+  }
   if (loading) return <p>Loading users...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <div>
       <h2>User List</h2>
+      <CreateUser setUsers={setUsers} /> {/* Pass setUsers as a prop */}
       <table border="1" cellPadding="8">
         <thead>
           <tr>
@@ -33,6 +43,7 @@ const UserList = () => {
             <th>Username</th>
             <th>Email</th>
             <th>Roles</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -43,10 +54,13 @@ const UserList = () => {
                 <td>{user.username}</td>
                 <td>{user.email}</td>
                 <td>{user.roles.map((role) => role.roleName).join(", ")}</td>
+                <td>
+                  <button onClick={() => handleDelete(user.userId)}>Delete</button>
+                </td>
               </tr>
             ))
           ) : (
-            <tr><td colSpan="4">No users found.</td></tr>
+            <tr><td colSpan="5">No users found.</td></tr>
           )}
         </tbody>
       </table>

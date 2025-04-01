@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { fetchUserById, updateUser } from "../api/userApi";
+import { fetchUserById, updateUser } from "../../api/userApi";
+
 
 const EditUserForm = ({ userId, setUsers }) => {
   const [username, setUsername] = useState("");

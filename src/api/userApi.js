@@ -13,7 +13,7 @@ export const fetchUserById = async (userId) => {
   };
 
   export const createUser = async (userData) => {
-    const response = await axiosClient.post("/users", userData);
+    const response = await axiosClient.post("/user", userData);
     return response.data;
   };
   
