@@ -7,18 +7,15 @@ import UserList from "./Components/UserList";
 
 function App() {
   return (
-    <div>
-      <h1>My App</h1>
-      <div>
-         <ul>
-            <UserList />
-         </ul>
+    <div className="flex flex-col items-center w-full">
+      <h1 className="text-2xl font-bold mt-4">Task Manager</h1>
+      <div className="w-full">
+        <ul>
+          <UserList />
+        </ul>
       </div>
-     
-
     </div>
   );
+  
 }
-
-
 export default App;

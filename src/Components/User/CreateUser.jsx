@@ -6,7 +6,10 @@ const CreateUser = ({ setUsers, formClasses, inputClasses, buttonClasses, handle
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("ROLE_USER");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const usernameRef = useRef(null);
+  const emailRef = useRef(null);
 
   useEffect(() => {
     usernameRef.current.focus();
@@ -14,6 +17,15 @@ const CreateUser = ({ setUsers, formClasses, inputClasses, buttonClasses, handle
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Client-side validation for the pattern
+    const pattern = /.*[a-zA-Z].*/;
+    if (!pattern.test(username)) {
+      setErrorMessage("Username must contain at least one alphabetical letter");
+      return;
+    } else {
+      setErrorMessage("");
+    }
 
     const newUser = {
       username,
@@ -29,6 +41,17 @@ const CreateUser = ({ setUsers, formClasses, inputClasses, buttonClasses, handle
       console.error("Error creating user", error);
     }
   };
+
+  const handleEmailInvalid = (e) => {
+    e.target.setCustomValidity("Invalid email form");
+    setEmailErrorMessage("Invalid email form");
+  };
+
+  const handleEmailInput = (e) => {
+    e.target.setCustomValidity("");
+    setEmailErrorMessage("");
+  };
+
   return (
     <form onSubmit={handleSubmit} className={formClasses}>
       <h3 className="text-xl font-semibold mb-4">Add New User</h3>
@@ -43,6 +66,7 @@ const CreateUser = ({ setUsers, formClasses, inputClasses, buttonClasses, handle
           className={inputClasses}
           ref={usernameRef}
         />
+        {errorMessage && <p className="text-red-500 text-sm mt-1">{errorMessage}</p>}
       </div>
 
       <div className="mb-4">
@@ -51,9 +75,13 @@ const CreateUser = ({ setUsers, formClasses, inputClasses, buttonClasses, handle
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          onInvalid={handleEmailInvalid}
+          onInput={handleEmailInput}
           required
           className={inputClasses}
+          ref={emailRef}
         />
+        {emailErrorMessage && <p className="text-red-500 text-sm mt-1">{emailErrorMessage}</p>}
       </div>
 
       <div className="mb-4">
