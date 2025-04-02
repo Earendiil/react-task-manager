@@ -9,7 +9,7 @@ const CreateUser = ({ setUsers, formClasses, inputClasses, buttonClasses, handle
   const [errorMessage, setErrorMessage] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const usernameRef = useRef(null);
-  const emailRef = useRef(null);
+  const emailRef = useRef(null)
 
   useEffect(() => {
     usernameRef.current.focus();
@@ -17,30 +17,35 @@ const CreateUser = ({ setUsers, formClasses, inputClasses, buttonClasses, handle
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Client-side validation for the pattern
+  
+    // Validate username pattern
     const pattern = /.*[a-zA-Z].*/;
     if (!pattern.test(username)) {
       setErrorMessage("Username must contain at least one alphabetical letter");
+      usernameRef.current.focus();
       return;
-    } else {
-      setErrorMessage("");
     }
-
-    const newUser = {
-      username,
-      email,
-      password,
-      roles: [{ roleName: role }],
-    };
-
+  
+    // Validate email pattern
+    if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+      setEmailErrorMessage("Invalid email format");
+      emailRef.current.focus();
+      return;
+    }
+  
+    setErrorMessage("");
+    setEmailErrorMessage("");
+  
+    const newUser = { username, email, password, roles: [{ roleName: role }] };
+  
     try {
       const createdUser = await createUser(newUser);
-      setUsers((prevUsers) => [...prevUsers, createdUser]);
+      setUsers(createdUser);
     } catch (error) {
       console.error("Error creating user", error);
     }
   };
+  
 
   const handleEmailInvalid = (e) => {
     e.target.setCustomValidity("Invalid email form");
