@@ -36,7 +36,7 @@ const CreateUser = ({ setUsers, formClasses, inputClasses, buttonClasses, handle
 
     try {
       const createdUser = await createUser(newUser);
-      setUsers(createdUser);
+      setUsers((prevUsers) => [...prevUsers, createdUser]);
     } catch (error) {
       console.error("Error creating user", error);
     }
@@ -77,6 +77,8 @@ const CreateUser = ({ setUsers, formClasses, inputClasses, buttonClasses, handle
           onChange={(e) => setEmail(e.target.value)}
           onInvalid={handleEmailInvalid}
           onInput={handleEmailInput}
+          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+          title="Enter a valid email (e.g., user@example.com)"
           required
           className={inputClasses}
           ref={emailRef}
@@ -90,6 +92,7 @@ const CreateUser = ({ setUsers, formClasses, inputClasses, buttonClasses, handle
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          minLength="6"
           required
           className={inputClasses}
         />
