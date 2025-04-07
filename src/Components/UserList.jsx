@@ -80,23 +80,19 @@ const UserList = () => {
           </button>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border border-gray-200">
-              <thead>
-                <tr>
-                  <th className="px-4 py-2 border-b">ID</th>
-                  <th className="px-4 py-2 border-b">Username</th>
-                  <th className="px-4 py-2 border-b">Email</th>
-                  <th className="px-4 py-2 border-b">Roles</th>
-                  <th className="px-4 py-2 border-b">Actions</th>
-                </tr>
-              </thead>
+            <thead>
+              <tr>
+                <th className="px-4 py-2 border-b text-left">ID</th>
+                <th className="px-4 py-2 border-b text-left">Username</th>
+                <th className="px-4 py-2 border-b text-left">Actions</th>
+              </tr>
+            </thead>
               <tbody>
                 {users.length > 0 ? (
                   users.map((user) => (
-                    <tr key={user.userId} className="hover:bg-gray-100">
-                      <td className="px-4 py-2 border-b">{user.userId}</td>
-                      <td className="px-4 py-2 border-b">{user.username}</td>
-                      <td className="px-4 py-2 border-b">{user.email}</td>
-                      <td className="px-4 py-2 border-b">{user.roles.map((role) => role.roleName).join(", ")}</td>
+                    <tr key={user.userId} className="hover:bg-gray-100 text-left">
+                      <td className="px-4 py-2 border-b text-left">{user.userId}</td>
+                      <td className="px-4 py-2 border-b text-left">{user.username}</td>
                       <td className="px-4 py-2 border-b">
                         <button 
                           onClick={() => handleUpdateUser(user.userId)} 
@@ -106,9 +102,15 @@ const UserList = () => {
                         </button>
                         <button 
                           onClick={() => handleDelete(user.userId)} 
-                          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mr-2"
                         >
                           Delete
+                        </button>
+                        <button 
+                          
+                          className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                        >
+                          User Info 
                         </button>
                       </td>
                     </tr>
