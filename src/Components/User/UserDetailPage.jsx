@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getUserById, getUserTasks } from "@/api/userApi";  // Assuming getUserById and getUserTasks are correct
+import { getUserById, getUserTasks } from "@/api/userApi";  
 
 const UserDetailPage = () => {
   const { id } = useParams();
@@ -15,9 +15,7 @@ const UserDetailPage = () => {
         const data = await getUserById(id);
         setUser(data);
 
-        // Fetch user tasks (if not already included in the user data)
-        const userTasks = data.tasks || [];  // Use the tasks from user data if available
-        setTasks(userTasks);
+     
 
         setLoading(false);
       } catch (err) {

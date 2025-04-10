@@ -1,7 +1,7 @@
 import axiosClient from "./axiosClient";
 
 // Fetch all tasks
-export const fetchTasks = async () => {
+export const getAllTasks = async () => {
   const response = await axiosClient.get("/tasks");
   return response.data;
 };
@@ -18,6 +18,10 @@ export const updateTask = async (taskId, taskData) => {
   return response.data;
 };
 
+export const getTaskUsers = async (taskId, taskData) => {
+  const response = await axiosClient.put(`/${taskId}/users`, taskData);
+  return response.data;
+};
 
 export const deleteTask = async (taskId) => {
   const response = await axiosClient.delete(`/tasks/${taskId}`);
