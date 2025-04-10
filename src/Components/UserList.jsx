@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { deleteUser, fetchUsers, updateUser } from "../api/userApi";
 import CreateUser from "./User/CreateUser";
 import UpdateUser from "./User/UpdateUser";
+import { Button } from "@/components/ui/button";
+
+
+
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -112,6 +116,7 @@ const UserList = () => {
                         >
                           User Info 
                         </button>
+                        
                       </td>
                     </tr>
                   ))
