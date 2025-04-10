@@ -1,9 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 import DashboardLayout from "./components/Dashboard";
 import DashboardHome from "./pages/DashboardHome";
-import UsersPage from "./pages/UserPage";
+import UsersPage from "./pages/UsersPage";
 import TasksPage from "./pages/TasksPage";
 import CategoriesPage from "./pages/CategoriesPage";
+import UserDetailPage from "./components/User/UserDetailPage";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route index element={<DashboardHome />} />
         <Route path="dashboard" element={<DashboardHome />} />
         <Route path="users" element={<UsersPage />} />
+        <Route path="users/:id" element={<UserDetailPage />} />
         <Route path="tasks" element={<TasksPage />} />
         <Route path="categories" element={<CategoriesPage />} />
       </Route>

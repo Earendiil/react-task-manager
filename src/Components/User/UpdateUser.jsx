@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { fetchUserById, updateUser } from "../../api/userApi";
+import {  getUserById, updateUser } from "../../api/userApi";
 
 const UpdateUser = ({ userId, onUserUpdated, formClasses, inputClasses, buttonClasses, handleCancel }) => {
   const [user, setUser] = useState({ username: "", email: "", password: "", roles: [{ roleName: "ROLE_USER" }] });
@@ -14,7 +14,7 @@ const UpdateUser = ({ userId, onUserUpdated, formClasses, inputClasses, buttonCl
   const emailRef = useRef(null);
 
   useEffect(() => {
-    fetchUserById(userId)
+    getUserById(userId)
       .then((data) => {
         setUser(data);
         setLoading(false);

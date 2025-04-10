@@ -16,7 +16,7 @@ const DashboardLayout = () => {
       {/* Sidebar + Main content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-        <aside className="w-64 bg-gray-100 p-4 border-r overflow-y-auto">
+        <aside className="w-64 bg-gray-300 p-4 border-r overflow-y-auto">
           <ul className="space-y-3">
             <li><Link to="/dashboard" className="hover:bg-gray-200 block px-3 py-2 rounded">Dashboard</Link></li>
             <li><Link to="/users" className="hover:bg-gray-200 block px-3 py-2 rounded">Users</Link></li>
@@ -26,7 +26,7 @@ const DashboardLayout = () => {
         </aside>
 
         {/* Dynamic content */}
-        <main className="flex-1 p-6 bg-gray-50 overflow-y-auto">
+        <main className="flex-1 p-6 bg-gray-500 overflow-y-auto">
           <Outlet />
         </main>
       </div>

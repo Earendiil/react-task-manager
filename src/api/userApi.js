@@ -9,7 +9,7 @@ export const fetchUsers = async () => {
   }
 };
 
-export const fetchUserById = async (userId) => {
+export const getUserById = async (userId) => {
   try {
     const response = await axiosClient.get(`/users/${userId}`);
     return response.data;
@@ -20,7 +20,7 @@ export const fetchUserById = async (userId) => {
 
 export const createUser = async (userData) => {
   try {
-    const response = await axiosClient.post("/user", userData); // Adjusted endpoint to "/users"
+    const response = await axiosClient.post("/user", userData); 
     return response.data;
   } catch (error) {
     handleApiError(error);
