@@ -30,7 +30,7 @@ const TaskPage = () => {
 
   return (
     <div className="p-6 bg-blue-100 rounded shadow">
-      <h2 className="text-2xl font-semibold mb-4">Tasks for User {userId}</h2>
+      <h2 className="text-2xl font-semibold mb-4">Tasks  {userId}</h2>
 
       {/* Display tasks */}
       {tasks.length > 0 ? (
@@ -38,7 +38,7 @@ const TaskPage = () => {
           <TaskCard
             key={task.taskId}
             task={task}
-            assignedUsers={task.assignedUsers}  // Pass assigned users to TaskCard
+            assignedUsers={task.assignedUsers}  
           />
         ))
       ) : (

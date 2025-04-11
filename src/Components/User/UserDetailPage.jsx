@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getUserById, getUserTasks } from "@/api/userApi";  
+import { FaHourglassHalf } from "react-icons/fa";
 
 const UserDetailPage = () => {
   const { id } = useParams();
@@ -15,7 +16,9 @@ const UserDetailPage = () => {
         const data = await getUserById(id);
         setUser(data);
 
-     
+        // Fetch user tasks (if not already included in the user data)
+        const userTasks = data.tasks || [];  // Use the tasks from user data if available
+        setTasks(userTasks);
 
         setLoading(false);
       } catch (err) {
@@ -58,8 +61,16 @@ const UserDetailPage = () => {
           {tasks.map((task) => (
             <li key={task.id} className="border-b py-2">
               <p><strong>Task:</strong> {task.title}</p>
-              <p><strong>Status:</strong> {task.status}</p>
-              {/* Add any other task details you need */}
+              <p><strong>Status:</strong>   {task.completed  ? (
+                                      <span className="text-green-500 flex items-center">
+                                        <FaCheckCircle className="mr-1" /> Completed
+                                      </span>
+                                    ) : (
+                                      <span className="text-yellow-500 flex items-center">
+                                        <FaHourglassHalf className="mr-1" /> Pending
+                                      </span>
+                                    )}</p>
+              {/* Add Task Details here */}
             </li>
           ))}
         </ul>

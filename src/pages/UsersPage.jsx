@@ -96,6 +96,7 @@ const UsersPage = () => {
                 {users.length > 0 ? (
                   users.map((user) => (
                     <tr key={user.userId} className="hover:bg-gray-50">
+                     <td className="px-4 py-2 border-b">{user.userId}</td>
                      <td className="px-4 py-2 border-b">
                         <Link
                           to={`/users/${user.userId}`}
