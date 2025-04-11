@@ -5,6 +5,7 @@ import UsersPage from "./pages/UsersPage";
 import TasksPage from "./pages/TasksPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import UserDetailPage from "./components/User/UserDetailPage";
+import CategoryDetailPage from "./components/Category/CategoryDetailPage";
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
         <Route path="users/:id" element={<UserDetailPage />} />
         <Route path="tasks" element={<TasksPage />} />
         <Route path="categories" element={<CategoriesPage />} />
+        <Route path="/categories/:id" element={<CategoryDetailPage />} />
+
       </Route>
     </Routes>
   );
