@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getCategoryById } from "@/api/categoryApi";
-import { getAllTasks, createTask } from "@/api/taskApi"; // Import task APIs
+import { getAllTasks, createTask } from "@/api/taskApi"; 
 
 const CategoryDetailPage = () => {
   const { id } = useParams(); // Category ID from URL

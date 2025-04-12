@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createTask } from "@/api/taskApi"; // The function to create a task
+import { createTask } from "@/api/taskApi"; 
 import { useNavigate } from "react-router-dom";
 
 const CreateTaskForm = ({ categoryId }) => {
@@ -11,7 +11,7 @@ const CreateTaskForm = ({ categoryId }) => {
     dueDate: "",
     description: "",
     completed: false,
-    categoryId: categoryId, // categoryId is passed as a prop
+    categoryId: categoryId, 
   });
 
   // Handle input changes for task creation
