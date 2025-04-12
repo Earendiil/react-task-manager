@@ -2,28 +2,44 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getAllTasks } from "@/api/taskApi";
 import TaskCard from "@/components/Task/TaskCard";
+import { getAllUsers } from "@/api/userApi";
 
 const TaskPage = () => {
   const { userId } = useParams(); // Assuming you get the userId from the URL
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [users, setUsers] = useState([]);
 
-  // Fetch tasks from the backend
+  
+
   useEffect(() => {
-    const fetchTasks = async () => {
+    const fetchTasksAndUsers = async () => {
       try {
-        const taskData = await getAllTasks(userId);  // Get tasks for the user
+        const taskData = await getAllTasks(userId);
         setTasks(taskData);
-        setLoading(false);
       } catch (err) {
+        console.error("Failed to fetch tasks:", err);
         setError("Failed to load tasks");
         setLoading(false);
+        return;
       }
+    
+      try {
+        const userData = await getAllUsers();
+        setUsers(userData);
+      } catch (err) {
+        console.error("Failed to fetch users:", err);
+        setError("Failed to load users");
+        setLoading(false);
+      }
+    
+      setLoading(false);
     };
-
-    fetchTasks();
+    
+    fetchTasksAndUsers();
   }, [userId]);
+  
 
   if (loading) return <p>Loading tasks...</p>;
   if (error) return <p>{error}</p>;
@@ -34,16 +50,17 @@ const TaskPage = () => {
 
       {/* Display tasks */}
       {tasks.length > 0 ? (
-        tasks.map((task) => (
-          <TaskCard
-            key={task.taskId}
-            task={task}
-            assignedUsers={task.assignedUsers}  
-          />
-        ))
-      ) : (
-        <p>No tasks assigned.</p>
-      )}
+          tasks.map((task) => (
+            <TaskCard
+              key={task.taskId}
+              task={task}
+              allUsers={users}
+    />
+  ))
+) : (
+  <p>No tasks assigned.</p>
+)}
+
     </div>
   );
 };

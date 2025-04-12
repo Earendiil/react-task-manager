@@ -1,6 +1,6 @@
 import axiosClient from "./axiosClient";
 
-export const fetchUsers = async () => {
+export const getAllUsers = async () => {
   try {
     const response = await axiosClient.get("/users");
     return response.data;

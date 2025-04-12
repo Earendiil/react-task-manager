@@ -33,3 +33,7 @@ export const idleTasks = async () => {
     return response.data;
   };
   
+export const assignTask = async (taskId, userId) => {
+  const response = await axiosClient.post(`/tasks/${taskId}/${userId}`);
+  return response.data;
+}

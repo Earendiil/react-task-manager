@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { deleteUser, fetchUsers } from "../api/userApi";
+import { deleteUser,  getAllUsers } from "../api/userApi";
 import CreateUser from "../components/User/CreateUser";
 import UpdateUser from "../components/User/UpdateUser";
 import { Link } from "react-router-dom";
@@ -16,7 +16,7 @@ const UsersPage = () => {
 
   const fetchAllUsers = async () => {
     try {
-      const data = await fetchUsers();
+      const data = await getAllUsers();
       setUsers(data);
       setLoading(false);
     } catch (err) {
