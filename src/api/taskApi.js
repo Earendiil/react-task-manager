@@ -31,13 +31,22 @@ export const createTask = async (taskData) => {
 };
 
 export const updateTask = async (taskId, taskData) => {
-  validateTaskData(taskData); 
-  const response = await axiosClient.put(`/tasks/${taskId}`, taskData);
+  validateTaskData(taskData);
+  const response = await axiosClient.put(`/tasks/${taskId}`, {
+    taskName: taskData.taskName,      // required by backend
+    title: taskData.title,
+    description: taskData.description,
+    dueDate: taskData.dueDate,
+    completed: taskData.completed,
+    categoryId: taskData.categoryId   // required by backend
+  });
   return response.data;
 };
 
+
+
 export const getTaskUsers = async (taskId, taskData) => {
-  const response = await axiosClient.put(`/${taskId}/users`, taskData);
+  const response = await axiosClient.get(`/${taskId}/users`, taskData);
   return response.data;
 };
 

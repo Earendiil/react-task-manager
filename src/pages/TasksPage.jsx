@@ -54,7 +54,8 @@ const TaskPage = () => {
             <TaskCard
               key={task.taskId}
               task={task}
-              allUsers={users}
+              users={users}
+              setTasks={setTasks}
     />
   ))
 ) : (

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FaCheckCircle, FaHourglassHalf, FaEdit } from "react-icons/fa";
 import { assignTask } from "@/api/taskApi";
 import { getAllCategories } from "@/api/categoryApi";
+import UpdateTaskForm from "./UpdateTaskForm";
 
 
 const TaskCard = ({ task, users, setTasks }) => {
@@ -9,6 +10,7 @@ const TaskCard = ({ task, users, setTasks }) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [allUsers, setAllUsers] = useState ([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -22,29 +24,52 @@ const TaskCard = ({ task, users, setTasks }) => {
     fetchCategories();
   }, []);
 
-  const handleAssignUser = async (userId) => {
-    try {
-      await assignTask(taskId, userId);
-      alert("User assigned successfully!");
-      setTasks((prevTasks) =>
-        prevTasks.map((t) =>
-          t.taskId === taskId
-            ? {
-                ...t,
-                assignedUsers: [...t.assignedUsers, {
-                  id: userId,
-                  username: users.find((u) => u.id === userId)?.username,
-                }],
-              }
-            : t
-        )
-      );
-    } catch (err) {
-      console.error("Error assigning user:", err);
-      alert("Failed to assign user.");
-    }
-  };
+ 
+    useEffect(() => {
+      const fetchUsers = async () => {
+        const usersData = await getAllUsers();
+        setAllUsers(usersData);
+      };
+      fetchUsers();
+    }, []);
 
+
+    const handleAssignUser = async (userId) => {
+      if (!userId) return; // Handle case where no user is selected
+    
+      // Check if the user is already assigned
+      const isUserAlreadyAssigned = assignedUsers.some((user) => user.id === userId);
+    
+      if (isUserAlreadyAssigned) {
+        alert("This user is already assigned to the task.");
+        return; // Exit the function if the user is already assigned
+      }
+    
+      try {
+        // Assign the user
+        await assignTask(taskId, userId);
+        alert("User assigned successfully!");
+    
+        // Update the task's assigned users list
+        setTasks((prevTasks) =>
+          prevTasks.map((t) =>
+            t.taskId === taskId
+              ? {
+                  ...t,
+                  assignedUsers: [
+                    ...t.assignedUsers,
+                    { id: userId, username: users.find((u) => u.id === userId)?.username },
+                  ],
+                }
+              : t
+          )
+        );
+      } catch (err) {
+        console.error("Error assigning user:", err);
+        alert("Failed to assign user.");
+      }
+    };
+    
   const handleTaskUpdated = (updatedTask) => {
     setTasks((prev) =>
       prev.map((t) => (t.taskId === updatedTask.taskId ? updatedTask : t))
@@ -113,16 +138,17 @@ const TaskCard = ({ task, users, setTasks }) => {
             <h4 className="text-lg font-medium">Assign User</h4>
             {users && users.length > 0 ? (
               <select
-                onChange={(e) => handleAssignUser(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-              >
-                <option value="">Select User</option>
-                {users.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.username}
-                  </option>
-                ))}
-              </select>
+                  onChange={(e) => handleAssignUser(parseInt(e.target.value))}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                >
+                  <option value="">Select User</option>
+                  {users.map((user) => (
+                    <option key={user.userId} value={user.userId}>
+                      {user.username}
+                    </option>
+                  ))}
+            </select>
+            
             ) : (
               <p>No users available to assign.</p>
             )}

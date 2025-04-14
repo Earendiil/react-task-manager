@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getCategoryById } from "@/api/categoryApi";
-import { getAllTasks, createTask } from "@/api/taskApi"; 
+import { getAllTasks } from "@/api/taskApi"; 
 import CreateTaskForm from "../Task/CreateTaskForm";
 
 const CategoryDetailPage = () => {
@@ -12,17 +12,17 @@ const CategoryDetailPage = () => {
   const [isFormVisible, setIsFormVisible] = useState(false); // State for toggling form visibility
  
 
-  // Fetch category details and tasks when the page loads
+  
   useEffect(() => {
     const fetchCategoryData = async () => {
-      const categoryData = await getCategoryById(id); // Fetch category details
+      const categoryData = await getCategoryById(id); 
       setCategory(categoryData);
 
-      // Fetch tasks for the selected category directly
-      const tasksData = await getAllTasks(); // Assuming this returns all tasks
+      
+      const tasksData = await getAllTasks(); 
       const filteredTasks = tasksData.filter((task) => task.categoryId === Number(id));
-      setTasks(filteredTasks); // Filter tasks by categoryId
-    };
+      setTasks(filteredTasks); 
+    }
 
     fetchCategoryData();
   }, [id]);
