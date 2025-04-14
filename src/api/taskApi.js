@@ -31,7 +31,7 @@ export const createTask = async (taskData) => {
 };
 
 export const updateTask = async (taskId, taskData) => {
-  validateTaskData(taskData); // Validate before sending
+  validateTaskData(taskData); 
   const response = await axiosClient.put(`/tasks/${taskId}`, taskData);
   return response.data;
 };

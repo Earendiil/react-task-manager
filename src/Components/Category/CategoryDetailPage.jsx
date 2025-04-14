@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getCategoryById } from "@/api/categoryApi";
 import { getAllTasks, createTask } from "@/api/taskApi"; 
+import CreateTaskForm from "../Task/CreateTaskForm";
 
 const CategoryDetailPage = () => {
   const { id } = useParams(); // Category ID from URL
@@ -9,13 +10,7 @@ const CategoryDetailPage = () => {
   const [category, setCategory] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [isFormVisible, setIsFormVisible] = useState(false); // State for toggling form visibility
-  const [taskData, setTaskData] = useState({
-    taskName: "",
-    title: "",
-    description: "",
-    dueDate: "",
-    categoryId: id,
-  });
+ 
 
   // Fetch category details and tasks when the page loads
   useEffect(() => {
@@ -32,42 +27,9 @@ const CategoryDetailPage = () => {
     fetchCategoryData();
   }, [id]);
 
-  const handleCreateTask = async (e) => {
-    e.preventDefault();
-    try {
-      await createTask(taskData); // Create the task
-      setIsFormVisible(false); // Hide the form after task is created
-      setTaskData({
-        taskName: "",
-        title: "",
-        description: "",
-        dueDate: "",
-        categoryId: id,
-      });
-
-      // Re-fetch the category to show the newly added task
-      const categoryData = await getCategoryById(id);
-      setCategory(categoryData);
-
-      // Update the tasks for the current category
-      const tasksData = await getAllTasks();
-      const filteredTasks = tasksData.filter((task) => task.categoryId === Number(id));
-      setTasks(filteredTasks);
-    } catch (error) {
-      console.error("Error creating task:", error);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setTaskData({
-      ...taskData,
-      [name]: value,
-    });
-  };
-
+   // Navigate back to the categories page
   const handleBackClick = () => {
-    navigate("/categories");  // Navigate back to the categories page
+    navigate("/categories"); 
   };
 
   // Function to format date as "MM/DD/YYYY"
@@ -76,7 +38,7 @@ const CategoryDetailPage = () => {
     const month = date.getMonth() + 1; // Months are zero-indexed
     const day = date.getDate();
     const year = date.getFullYear();
-    return `${month}/${day}/${year}`; // Format: MM/DD/YYYY
+    return `${month}/${day}/${year}`; 
   };
 
   return (
@@ -101,61 +63,21 @@ const CategoryDetailPage = () => {
 
           {/* Display task creation form when isFormVisible is true */}
           {isFormVisible && (
-            <div className="task-form bg-white shadow-lg rounded-lg p-6 mb-6">
-              <h3 className="text-xl font-semibold mb-4">Create New Task</h3>
-              <form onSubmit={handleCreateTask}>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium mb-2">Task Name</label>
-                  <input
-                    type="text"
-                    name="taskName"
-                    value={taskData.taskName}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium mb-2">Title</label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={taskData.title}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium mb-2">Description</label>
-                  <textarea
-                    name="description"
-                    value={taskData.description}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium mb-2">Due Date</label>
-                  <input
-                    type="date"
-                    name="dueDate"
-                    value={taskData.dueDate}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-                >
-                  Create Task
-                </button>
-              </form>
-            </div>
-          )}
+  <CreateTaskForm
+    categoryId={id}
+    onTaskCreated={async () => {
+      setIsFormVisible(false);
+
+      const categoryData = await getCategoryById(id);
+      setCategory(categoryData);
+
+      const tasksData = await getAllTasks();
+      const filteredTasks = tasksData.filter((task) => task.categoryId === Number(id));
+      setTasks(filteredTasks);
+    }}
+  />
+)}
+
 
           <div className="tasks-list">
             <h3 className="text-xl font-semibold mb-4">Tasks</h3>
@@ -165,6 +87,7 @@ const CategoryDetailPage = () => {
               ) : (
                 tasks.map((task) => (
                   <li key={task.taskId} className="task-item mb-4">
+                    <h3 className="font-bold">{task.taskName}</h3>
                     <h4 className="font-semibold">{task.title}</h4>
                     <p>{task.description}</p>
                     <p>Due Date: {formatDate(task.dueDate)}</p> {/* Format the due date */}
