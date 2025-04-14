@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { FaCheckCircle, FaHourglassHalf, FaEdit } from "react-icons/fa";
+import { FaCheckCircle, FaHourglassHalf, FaEdit, FaRegCheckCircle } from "react-icons/fa";
 import { assignTask } from "@/api/taskApi";
 import { getAllCategories } from "@/api/categoryApi";
 import UpdateTaskForm from "./UpdateTaskForm";
+import { getAllUsers } from "@/api/userApi";
 
 
 const TaskCard = ({ task, users, setTasks }) => {
@@ -35,22 +36,19 @@ const TaskCard = ({ task, users, setTasks }) => {
 
 
     const handleAssignUser = async (userId) => {
-      if (!userId) return; // Handle case where no user is selected
+      if (!userId) return;
     
-      // Check if the user is already assigned
       const isUserAlreadyAssigned = assignedUsers.some((user) => user.id === userId);
-    
       if (isUserAlreadyAssigned) {
         alert("This user is already assigned to the task.");
-        return; // Exit the function if the user is already assigned
+        return;
       }
     
       try {
-        // Assign the user
         await assignTask(taskId, userId);
         alert("User assigned successfully!");
     
-        // Update the task's assigned users list
+        // Update from parent state instead of local prop
         setTasks((prevTasks) =>
           prevTasks.map((t) =>
             t.taskId === taskId
@@ -58,7 +56,10 @@ const TaskCard = ({ task, users, setTasks }) => {
                   ...t,
                   assignedUsers: [
                     ...t.assignedUsers,
-                    { id: userId, username: users.find((u) => u.id === userId)?.username },
+                    {
+                      id: userId,
+                      username: users.find((u) => u.id === userId)?.username,
+                    },
                   ],
                 }
               : t
@@ -69,6 +70,7 @@ const TaskCard = ({ task, users, setTasks }) => {
         alert("Failed to assign user.");
       }
     };
+    
     
   const handleTaskUpdated = (updatedTask) => {
     setTasks((prev) =>
@@ -123,7 +125,7 @@ const TaskCard = ({ task, users, setTasks }) => {
               <strong>Status: </strong>
               {completed ? (
                 <span className="text-green-500 flex items-center">
-                  <FaCheckCircle className="mr-1" /> Completed
+                  <FaRegCheckCircle className="mr-1" /> Completed
                 </span>
               ) : (
                 <span className="text-yellow-500 flex items-center">

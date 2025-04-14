@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getUserById, getUserTasks } from "@/api/userApi";  
-import { FaHourglassHalf } from "react-icons/fa";
+import { FaCheckCircle, FaHourglassHalf } from "react-icons/fa";
 
 const UserDetailPage = () => {
   const { id } = useParams();
@@ -59,7 +59,7 @@ const UserDetailPage = () => {
       {tasks.length > 0 ? (
         <ul>
           {tasks.map((task) => (
-            <li key={task.id} className="border-b py-2">
+            <li key={task.taskId} className="border-b py-2">
               <p><strong>Task:</strong> {task.title}</p>
               <p><strong>Status:</strong>   {task.completed  ? (
                                       <span className="text-green-500 flex items-center">
