@@ -42,43 +42,67 @@ const CategoryDetailPage = () => {
   };
 
   return (
-    <div className="category-detail-container">
+    <div className="category-detail-container relative p-6">
       <button
         onClick={handleBackClick}
         className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 mb-4"
       >
         Back to Categories
       </button>
+  
       {category && (
         <>
-          <h2 className="text-2xl font-semibold mb-6">{category.name}</h2>
-          <p className="text-lg mb-6">Total tasks: {tasks.length}</p>
-
+          {/* Header with delete button top right */}
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <h2 className="text-2xl font-semibold">{category.name}</h2>
+              <p className="text-lg">Total tasks: {tasks.length}</p>
+            </div>
+  
+            <button
+              onClick={async () => {
+                const confirmed = window.confirm("Are you sure you want to delete this category?");
+                if (!confirmed) return;
+  
+                try {
+                  await import("@/api/categoryApi").then(({ deleteCategory }) =>
+                    deleteCategory(category.categoryId)
+                  );
+                  navigate("/categories");
+                } catch (err) {
+                  console.error("Failed to delete category:", err);
+                }
+              }}
+              className="bg-red-500 text-white px-3 py-2 text-sm rounded-md hover:bg-red-600"
+            >
+              Delete Category
+            </button>
+          </div>
+  
           <button
             onClick={() => setIsFormVisible(!isFormVisible)}
             className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 mb-6"
           >
             {isFormVisible ? "Cancel" : "Create Task"}
           </button>
-
-          {/* Display task creation form when isFormVisible is true */}
+  
           {isFormVisible && (
-  <CreateTaskForm
-    categoryId={id}
-    onTaskCreated={async () => {
-      setIsFormVisible(false);
-
-      const categoryData = await getCategoryById(id);
-      setCategory(categoryData);
-
-      const tasksData = await getAllTasks();
-      const filteredTasks = tasksData.filter((task) => task.categoryId === Number(id));
-      setTasks(filteredTasks);
-    }}
-  />
-)}
-
-
+            <CreateTaskForm
+              categoryId={id}
+              onTaskCreated={async () => {
+                setIsFormVisible(false);
+                const categoryData = await getCategoryById(id);
+                setCategory(categoryData);
+  
+                const tasksData = await getAllTasks();
+                const filteredTasks = tasksData.filter(
+                  (task) => task.categoryId === Number(id)
+                );
+                setTasks(filteredTasks);
+              }}
+            />
+          )}
+  
           <div className="tasks-list">
             <h3 className="text-xl font-semibold mb-4">Tasks</h3>
             <ul>
@@ -90,7 +114,7 @@ const CategoryDetailPage = () => {
                     <h3 className="font-bold">{task.taskName}</h3>
                     <h4 className="font-semibold">{task.title}</h4>
                     <p>{task.description}</p>
-                    <p>Due Date: {formatDate(task.dueDate)}</p> {/* Format the due date */}
+                    <p>Due Date: {formatDate(task.dueDate)}</p>
                     <p>Status: {task.completed ? "Completed" : "Pending"}</p>
                   </li>
                 ))
@@ -101,6 +125,6 @@ const CategoryDetailPage = () => {
       )}
     </div>
   );
-};
+}
 
 export default CategoryDetailPage;

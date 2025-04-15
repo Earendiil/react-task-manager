@@ -80,7 +80,7 @@ const TaskCard = ({ task, users, setTasks }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 mb-4 relative">
+    <div className=" rounded-lg shadow-md p-4 mb-4 relative bg-slate-200">
       {!isEditing && (
         <button
           onClick={() => setIsEditing(true)}
@@ -137,11 +137,11 @@ const TaskCard = ({ task, users, setTasks }) => {
 
           {/* Assign Users */}
           <div className="mt-4">
-            <h4 className="text-lg font-medium">Assign User</h4>
+            <h4 className="py-3 text-slate-800 inline-block px-2">Assign User</h4>
             {users && users.length > 0 ? (
               <select
                   onChange={(e) => handleAssignUser(parseInt(e.target.value))}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  className="py-3 border bg-green-400 inline-block px-2 rounded-lg"
                 >
                   <option value="">Select User</option>
                   {users.map((user) => (
