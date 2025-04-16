@@ -1,11 +1,14 @@
 import { login } from "@/api/authAPI";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 
 
 const LoginPage = () => {
   const [credentials, setCredentials] = useState({ username: "", password: "" });
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -19,7 +22,7 @@ const LoginPage = () => {
       localStorage.setItem("user", JSON.stringify(data));
       navigate("/dashboard");
     } catch (error) {
-      alert("Login failed: " + error.response?.data?.message || error.message);
+      setError("Invalid username or password " );
     }
   };
 
@@ -28,12 +31,13 @@ const LoginPage = () => {
       <h2 className="text-2xl font-bold mb-4">Login</h2>
       <input name="username" placeholder="Username" value={credentials.username} onChange={handleChange} className="block w-full mb-3 p-2 border rounded" />
       <input name="password" type="password" placeholder="Password" value={credentials.password} onChange={handleChange} className="block w-full mb-3 p-2 border rounded" />
+      {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
       <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Login</button>
       <p className="text-sm mt-4 text-center">
         Don't have an account?{" "}
-        <a href="/signup" className="text-blue-600 hover:underline">
+        <Link to="/signup" className="text-blue-600 hover:underline">
             Sign Up
-        </a>
+        </Link>
         </p>
     </form>
 
