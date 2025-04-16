@@ -57,6 +57,6 @@ export const getUserTasks = async (userId) => {
 // Centralized error handling function
 const handleApiError = (error) => {
   console.error("API call failed: ", error);
-  // Implement your error handling logic here (e.g., show a notification, log the error, etc.)
+  // Implement error handling logic here 
   throw error; // Re-throw the error if you want to propagate it further
 };
