@@ -2,6 +2,13 @@ import React from "react";
 import { Outlet, Link } from "react-router-dom";
 
 const DashboardLayout = () => {
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = "/login";
+  };
+  
   return (
     <div className="h-screen flex flex-col">
       {/* Navbar */}
@@ -9,7 +16,8 @@ const DashboardLayout = () => {
         <div className="text-xl font-bold">TaskManager</div>
         <div className="flex items-center gap-4">
           <span className="hidden sm:inline">Welcome, User</span>
-          <button className="bg-blue-500 hover:bg-blue-700 px-3 py-1 rounded-md">Logout</button>
+          <button onClick={handleLogout}
+                  className="bg-blue-500 hover:bg-blue-700 px-3 py-1 rounded-md">Logout</button>
         </div>
       </nav>
 
