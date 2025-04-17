@@ -3,6 +3,7 @@ import { deleteUser,  getAllUsers } from "../api/userApi";
 import CreateUser from "../components/User/CreateUser";
 import UpdateUser from "../components/User/UpdateUser";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 
 const UsersPage = () => {
@@ -13,6 +14,7 @@ const UsersPage = () => {
   const [updatingUserId, setUpdatingUserId] = useState(null);
   const [fetchTrigger, setFetchTrigger] = useState(0);
   const [expandedUserId, setExpandedUserId] = useState(null); // for showing user info
+  const { isAdmin } = useAuth();
 
   const fetchAllUsers = async () => {
     try {
@@ -75,12 +77,21 @@ const UsersPage = () => {
         <>
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-semibold">Users</h2>
+            {isAdmin ? (
             <button
               onClick={handleCreateUser}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
               + Create User
             </button>
+            ): (
+              <button
+              className="px-4 py-2 bg-blue-300 text-white rounded"
+            >
+              + Create User
+            </button>
+            )  
+          }
           </div>
 
           <div className="overflow-x-auto">
@@ -105,8 +116,9 @@ const UsersPage = () => {
                           {user.username}
                         </Link>
                       </td>
-
+                      {isAdmin ? (
                       <td className="px-4 py-2 border-b space-x-2">
+                      
                         <button
                           onClick={() => handleUpdateUser(user.userId)}
                           className="bg-green-400 text-white px-3 py-1 rounded hover:bg-green-500"
@@ -119,7 +131,23 @@ const UsersPage = () => {
                         >
                           Delete
                         </button>
+                    
                       </td>
+                        ) : (
+                          <td className="px-4 py-2 border-b space-x-2">
+                      
+                          <button
+                            className="bg-green-200 text-white px-3 py-1 rounded"
+                          >
+                            Update
+                          </button>
+                          <button
+                            className="bg-red-200 text-white px-3 py-1 rounded "
+                          >
+                            Delete
+                          </button>                     
+                        </td>
+                        )}
 
                       {expandedUserId === user.userId && (
                         <tr className="bg-gray-100 text-sm text-gray-700">
