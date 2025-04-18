@@ -54,6 +54,16 @@ export const getUserTasks = async (userId) => {
   }
 };
 
+export const getCurrentUserTasks = async () => {
+  try {
+    const response = await axiosClient.get('/user/tasks');
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+
 // Centralized error handling function
 const handleApiError = (error) => {
   console.error("API call failed: ", error);

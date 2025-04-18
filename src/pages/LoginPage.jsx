@@ -17,14 +17,17 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = await login(credentials);
-      localStorage.setItem("token", data.token); // or data.jwtToken
-      localStorage.setItem("user", JSON.stringify(data));
+      const data = await login(credentials); 
+      localStorage.setItem("token", data.token);  // Store the JWT token
+      localStorage.setItem("userId", data.id);  // matches backend response
+
       navigate("/dashboard");
     } catch (error) {
-      setError("Invalid username or password " );
+      setError("Invalid username or password");
     }
+
   };
+  
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-20 p-6 bg-white rounded shadow">

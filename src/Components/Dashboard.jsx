@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 
 const DashboardLayout = () => {
 
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -15,7 +16,7 @@ const DashboardLayout = () => {
       <nav className="bg-blue-600 text-white px-6 py-4 flex justify-between items-center shadow-md">
         <div className="text-xl font-bold">TaskManager</div>
         <div className="flex items-center gap-4">
-          <span className="hidden sm:inline">Welcome, User</span>
+          <span className="hidden sm:inline">Welcome, </span>
           <button onClick={handleLogout}
                   className="bg-blue-500 hover:bg-blue-700 px-3 py-1 rounded-md">Logout</button>
         </div>

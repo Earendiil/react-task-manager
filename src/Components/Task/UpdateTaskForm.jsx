@@ -81,16 +81,17 @@ const UpdateTaskForm = ({ task, onCancel, onTaskUpdated, allUsers }) => {
         </div>
 
         <div className="mb-4">
-          <label className="block font-medium">Due Date</label>
-          <input
-            type="date"
-            name="dueDate"
-            value={taskData.dueDate.split("T")[0]} // trimming to YYYY-MM-DD
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md"
-          />
-          {errors.dueDate && <p className="text-red-500 text-sm">{errors.dueDate}</p>}
-        </div>
+            <label className="block font-medium">Due Date</label>
+            <input
+              type="date"
+              name="dueDate"
+              value={taskData.dueDate ? taskData.dueDate.split("T")[0] : ""} 
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md"
+            />
+            {errors.dueDate && <p className="text-red-500 text-sm">{errors.dueDate}</p>}
+          </div>
+
 
         <div className="flex justify-end space-x-2">
           <button

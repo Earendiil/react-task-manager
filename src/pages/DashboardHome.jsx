@@ -1,39 +1,50 @@
+import { useState, useEffect } from "react";
+import MyTasksCard from "@/components/Task/MyTasksCard";
+import { getUserTasks } from "@/api/userApi";
 
 const DashboardHome = () => {
-    return (
-      <div>
-        <h2 className="text-2xl font-semibold mb-6">Dashboard</h2>
-  
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <div className="bg-white shadow-md rounded-lg p-4">
-            <h3 className="text-lg font-medium mb-2">Tasks Today</h3>
-            <ul>
-              <li>☐ Task 1</li>
-              <li>☑ Task 2</li>
-            </ul>
-          </div>
-          <div className="bg-white shadow-md rounded-lg p-4">
-            <h3 className="text-lg font-medium mb-2">Upcoming</h3>
-            <ul>
-              <li>☐ Task 3</li>
-              <li>☑ Task 4</li>
-            </ul>
-          </div>
-          <div className="bg-white shadow-md rounded-lg p-4">
-            <h3 className="text-lg font-medium mb-2">Completed</h3>
-            <ul>
-              <li>☑ Task 5</li>
-              <li>☑ Task 6</li>
-            </ul>
-          </div>
-        </div>
-  
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
-          + Quick Add Task
-        </button>
-      </div>
-    );
-  };
-  
-  export default DashboardHome;
-  
+  const userId = localStorage.getItem("userId");
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); // To handle errors
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const tasksData = await getUserTasks(userId); // Fetch tasks for the user
+        setTasks(tasksData);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching tasks:", err);
+        setError("Failed to load tasks. Please try again.");
+        setLoading(false);
+      }
+    };
+
+    if (userId) {
+      fetchTasks();
+    } else {
+      setError("User ID not found.");
+      setLoading(false);
+    }
+  }, [userId]);
+
+  if (loading) return <div>Loading tasks...</div>;
+  if (error) return <div className="text-red-500">{error}</div>;
+
+  return (
+    <div>
+      {tasks.length > 0 ? (
+        tasks.map((task) => {
+          // Ensure unique key for each task
+          const taskKey = task.taskId || `${task.taskName}-${task.title}-${Math.random()}`;
+          return <MyTasksCard key={taskKey} task={task} setTasks={setTasks} />;
+        })
+      ) : (
+        <p>No tasks found.</p>
+      )}
+    </div>
+  );
+};
+
+export default DashboardHome;

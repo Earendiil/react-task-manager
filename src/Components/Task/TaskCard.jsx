@@ -7,11 +7,12 @@ import { getAllUsers } from "@/api/userApi";
 
 
 const TaskCard = ({ task, users, setTasks }) => {
-  const { taskId, taskName, title, description, dueDate, completed, assignedUsers, categoryId } = task;
+  const { taskId, taskName, title, description, dueDate, completed, assignedUsers = [], categoryId } = task;
 
   const [isEditing, setIsEditing] = useState(false);
   const [categories, setCategories] = useState([]);
   const [allUsers, setAllUsers] = useState ([]);
+  
 
   useEffect(() => {
     const fetchCategories = async () => {
