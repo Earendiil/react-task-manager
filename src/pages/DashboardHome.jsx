@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import TaskCard from "@/components/Task/TaskCard"; // ✅ Use TaskCard instead
+import TaskCard from "@/components/Task/TaskCard"; 
 import { getUserTasks, getAllUsers } from "@/api/userApi";
 
 const DashboardHome = () => {
   const userId = localStorage.getItem("userId");
   const [tasks, setTasks] = useState([]);
-  const [users, setUsers] = useState([]); // ✅ Store all users
+  const [users, setUsers] = useState([]); // Store all users
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -48,6 +48,7 @@ const DashboardHome = () => {
             task={task}
             users={users}
             setTasks={setTasks}
+            showAssignUser={false}
           />
         ))
       ) : (

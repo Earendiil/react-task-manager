@@ -19,8 +19,12 @@ const LoginPage = () => {
     try {
       const data = await login(credentials); 
       localStorage.setItem("token", data.token);  // Store the JWT token
-      localStorage.setItem("userId", data.id);  // matches backend response
-
+      localStorage.setItem("user", JSON.stringify({
+        id: data.id,
+        username: data.username,
+        roles: data.roles
+      }));
+  
       navigate("/dashboard");
     } catch (error) {
       setError("Invalid username or password");
