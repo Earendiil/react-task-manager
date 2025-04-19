@@ -1,28 +1,35 @@
 import { useState, useEffect } from "react";
-import MyTasksCard from "@/components/Task/MyTasksCard";
-import { getUserTasks } from "@/api/userApi";
+import TaskCard from "@/components/Task/TaskCard"; // ✅ Use TaskCard instead
+import { getUserTasks, getAllUsers } from "@/api/userApi";
 
 const DashboardHome = () => {
   const userId = localStorage.getItem("userId");
   const [tasks, setTasks] = useState([]);
+  const [users, setUsers] = useState([]); // ✅ Store all users
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // To handle errors
+  const [error, setError] = useState(null);
 
+  // Fetch tasks assigned to the logged-in user
   useEffect(() => {
-    const fetchTasks = async () => {
+    const fetchData = async () => {
       try {
-        const tasksData = await getUserTasks(userId); // Fetch tasks for the user
-        setTasks(tasksData);
+        const [taskData, userData] = await Promise.all([
+          getUserTasks(userId),
+          getAllUsers()
+        ]);
+
+        setTasks(taskData);
+        setUsers(userData);
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching tasks:", err);
-        setError("Failed to load tasks. Please try again.");
+        console.error("Error fetching data:", err);
+        setError("Error loading tasks.");
         setLoading(false);
       }
     };
 
     if (userId) {
-      fetchTasks();
+      fetchData();
     } else {
       setError("User ID not found.");
       setLoading(false);
@@ -35,11 +42,14 @@ const DashboardHome = () => {
   return (
     <div>
       {tasks.length > 0 ? (
-        tasks.map((task) => {
-          // Ensure unique key for each task
-          const taskKey = task.taskId || `${task.taskName}-${task.title}-${Math.random()}`;
-          return <MyTasksCard key={taskKey} task={task} setTasks={setTasks} />;
-        })
+        tasks.map((task) => (
+          <TaskCard
+            key={task.taskId}
+            task={task}
+            users={users}
+            setTasks={setTasks}
+          />
+        ))
       ) : (
         <p>No tasks found.</p>
       )}

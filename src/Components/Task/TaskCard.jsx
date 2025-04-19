@@ -141,20 +141,20 @@ const TaskCard = ({ task, users, setTasks }) => {
             <h4 className="py-3 text-slate-800 inline-block px-2">Assign User</h4>
             {users && users.length > 0 ? (
               <select
-                  onChange={(e) => handleAssignUser(parseInt(e.target.value))}
-                  className="py-3 border bg-green-400 inline-block px-2 rounded-lg"
-                >
-                  <option value="">Select User</option>
-                  {users.map((user) => (
-                    <option key={user.userId} value={user.userId}>
-                      {user.username}
-                    </option>
-                  ))}
-            </select>
-            
+                onChange={(e) => handleAssignUser(parseInt(e.target.value))}
+                className="py-3 border bg-green-400 inline-block px-2 rounded-lg"
+              >
+                <option value="">Select User</option>
+                {users.map((user) => (
+                  <option key={user.userId} value={user.userId}>
+                    {user.username}
+                  </option>
+                ))}
+              </select>
             ) : (
               <p>No users available to assign.</p>
             )}
+
           </div>
         </>
       )}

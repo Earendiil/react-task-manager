@@ -2,12 +2,31 @@ import { useState, useEffect } from "react";
 import { updateTask } from "@/api/taskApi"; 
 
 const UpdateTaskForm = ({ task, onCancel, onTaskUpdated, allUsers }) => {
-  const [taskData, setTaskData] = useState({ ...task });
+  const [taskData, setTaskData] = useState({
+    taskId: "",
+    taskName: "",
+    title: "",
+    description: "",
+    dueDate: "",
+    completed: false,
+    categoryId: 1,
+  });
   const [errors, setErrors] = useState({});
 
+  // Prefill the form with the task data whenever the task prop changes
   useEffect(() => {
-    setTaskData({ ...task });
-  }, [task]);
+    if (task) {
+      setTaskData({
+        taskId: task.taskId || "",
+        taskName: task.taskName || "", // Read-only field
+        title: task.title || "",
+        description: task.description || "",
+        dueDate: task.dueDate || "",
+        completed: task.completed || false,
+        categoryId: task.categoryId || 1, // Read-only field
+      });
+    }
+  }, [task]); // Only run when `task` prop changes
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,9 +40,8 @@ const UpdateTaskForm = ({ task, onCancel, onTaskUpdated, allUsers }) => {
     const dueDate = new Date(taskData.dueDate);
     const now = new Date();
 
-
-    if (!taskData.title.trim()) newErrors.title = "Title is required.";
-    if (!taskData.description.trim()) newErrors.description = "Description is required.";
+    if (!taskData.title?.trim()) newErrors.title = "Title is required.";
+    if (!taskData.description?.trim()) newErrors.description = "Description is required.";
     if (isNaN(dueDate.getTime())) {
       newErrors.dueDate = "Invalid date.";
     } else if (dueDate <= now) {
@@ -45,6 +63,7 @@ const UpdateTaskForm = ({ task, onCancel, onTaskUpdated, allUsers }) => {
     <div className="task-form bg-yellow-50 shadow-md rounded-lg p-6 mb-4">
       <h3 className="text-xl font-semibold mb-4">Edit Task</h3>
       <form onSubmit={handleSubmit}>
+        {/* Task Name (Read-only) */}
         <div className="mb-4">
           <label className="block font-medium">Task Name</label>
           <input
@@ -52,11 +71,11 @@ const UpdateTaskForm = ({ task, onCancel, onTaskUpdated, allUsers }) => {
             name="taskName"
             value={taskData.taskName}
             readOnly
-            className="w-full px-4 py-2 border rounded-md"
+            className="w-full px-4 py-2 border rounded-md bg-gray-200"
           />
-          {errors.taskName && <p className="text-red-500 text-sm">{errors.taskName}</p>}
         </div>
 
+        {/* Title (Editable) */}
         <div className="mb-4">
           <label className="block font-medium">Title</label>
           <input
@@ -69,6 +88,7 @@ const UpdateTaskForm = ({ task, onCancel, onTaskUpdated, allUsers }) => {
           {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
         </div>
 
+        {/* Description (Editable) */}
         <div className="mb-4">
           <label className="block font-medium">Description</label>
           <textarea
@@ -80,18 +100,34 @@ const UpdateTaskForm = ({ task, onCancel, onTaskUpdated, allUsers }) => {
           {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
         </div>
 
+        {/* Due Date (Editable) */}
         <div className="mb-4">
             <label className="block font-medium">Due Date</label>
             <input
               type="date"
               name="dueDate"
-              value={taskData.dueDate ? taskData.dueDate.split("T")[0] : ""} 
+              value={taskData.dueDate || ""} 
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-md"
             />
             {errors.dueDate && <p className="text-red-500 text-sm">{errors.dueDate}</p>}
-          </div>
+        </div>
 
+        {/* Completed (Editable checkbox) */}
+        <div className="mb-4">
+          <label className="inline-flex items-center">
+            <input
+              type="checkbox"
+              name="completed"
+              checked={taskData.completed}
+              onChange={(e) =>
+                setTaskData({ ...taskData, completed: e.target.checked })
+              }
+              className="mr-2"
+            />
+            <span>Completed</span>
+          </label>
+        </div>
 
         <div className="flex justify-end space-x-2">
           <button
