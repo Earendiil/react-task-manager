@@ -4,9 +4,7 @@ import { Outlet, Link } from "react-router-dom";
 const DashboardLayout = () => {
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
-  console.log(user); // Log the user object to check its structure
-
-
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
