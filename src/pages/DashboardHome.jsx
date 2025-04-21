@@ -48,6 +48,7 @@ const DashboardHome = () => {
 
   return (
     <div>
+      <h1 className="text-3xl"> My Tasks</h1>
       {tasks.length > 0 ? (
         tasks.map((task) => (
           <TaskCard

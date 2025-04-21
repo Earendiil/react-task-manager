@@ -38,7 +38,6 @@ const DashboardLayout = () => {
 
         {/* Dynamic content */}
         <main className="flex-1 p-6 bg-gray-400 overflow-y-auto">   
-        <h1 className="text-4xl mb-3">My Tasks</h1>
           <Outlet />
         </main>
       </div>

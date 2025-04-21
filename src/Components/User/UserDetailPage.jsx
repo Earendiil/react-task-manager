@@ -46,7 +46,7 @@ const UserDetailPage = () => {
         <ul>
           {user.roles.map((role) => (
             <li key={role.roleId}>
-              <p><strong>Role Name:</strong> {role.roleName}</p>
+              <p><strong>Role Name:</strong> {role.roleName === "ROLE_ADMIN" ? "Admin" : "User"}</p>
             </li>
           ))}
         </ul>
