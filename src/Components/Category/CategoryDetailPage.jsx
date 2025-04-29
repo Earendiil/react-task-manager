@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getCategoryById } from "@/api/categoryApi";
 import { getAllTasks } from "@/api/taskApi"; 
 import CreateTaskForm from "../Task/CreateTaskForm";
+import { useAuth } from "@/hooks/useAuth";
+
 
 const CategoryDetailPage = () => {
   const { id } = useParams(); // Category ID from URL
@@ -10,7 +12,7 @@ const CategoryDetailPage = () => {
   const [category, setCategory] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [isFormVisible, setIsFormVisible] = useState(false); // State for toggling form visibility
- 
+  const { isAdmin } = useAuth ();
 
   
   useEffect(() => {
@@ -58,7 +60,7 @@ const CategoryDetailPage = () => {
               <h2 className="text-2xl font-semibold">{category.name}</h2>
               <p className="text-lg">Total tasks: {tasks.length}</p>
             </div>
-  
+            { isAdmin && ( 
             <button
               onClick={async () => {
                 const confirmed = window.confirm("Are you sure you want to delete this category?");
@@ -77,16 +79,17 @@ const CategoryDetailPage = () => {
             >
               Delete Category
             </button>
+            )}
           </div>
-  
+          {isAdmin && (
           <button
             onClick={() => setIsFormVisible(!isFormVisible)}
             className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 mb-6"
           >
             {isFormVisible ? "Cancel" : "Create Task"}
           </button>
-  
-          {isFormVisible && (
+           )}
+          {isFormVisible &&   (
             <CreateTaskForm
               categoryId={id}
               onTaskCreated={async () => {

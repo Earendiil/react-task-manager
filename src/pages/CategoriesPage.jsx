@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addCategory, getAllCategories } from "@/api/categoryApi";
+import { useAuth } from "@/hooks/useAuth";
 
 const CategoriesPage = () => {
   const [categories, setCategories] = useState([]);
@@ -8,6 +9,7 @@ const CategoriesPage = () => {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { isAdmin } = useAuth()
 
   const fetchCategories = async () => {
     try {
@@ -48,12 +50,14 @@ const CategoriesPage = () => {
     <div className="categories-container bg-amber-300">
       <h2 className="text-2xl font-semibold mb-6">Categories</h2>
       <div>
+        {isAdmin && ( 
       <button
         onClick={() => setIsFormVisible(!isFormVisible)}
         className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 mb-4"
       >
         {isFormVisible ? "Cancel" : "Create Category"}
       </button>
+      )}
 
       {isFormVisible && (
         <form onSubmit={handleCreateCategory} className="mb-6">
