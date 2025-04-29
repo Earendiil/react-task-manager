@@ -4,6 +4,7 @@ import { assignTask } from "@/api/taskApi";
 import { getAllCategories } from "@/api/categoryApi";
 import UpdateTaskForm from "./UpdateTaskForm";
 import { getAllUsers } from "@/api/userApi";
+import { useAuth } from "@/hooks/useAuth";
 
 const TaskCard = ({ task, users, setTasks, showAssignUser = true }) => {
   const { taskId, taskName, title, description, dueDate, completed, assignedUsers = [], categoryId } = task;
@@ -11,7 +12,7 @@ const TaskCard = ({ task, users, setTasks, showAssignUser = true }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [categories, setCategories] = useState([]);
   const [allUsers, setAllUsers] = useState ([]);
-  
+  const { isAdmin } = useAuth();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -136,7 +137,8 @@ const TaskCard = ({ task, users, setTasks, showAssignUser = true }) => {
           </div>
 
           {/* Assign Users */}
-          {showAssignUser && (
+          
+          { isAdmin &&  showAssignUser && (
             <div className="mt-4">
                   <h4 className="py-3 text-slate-800 inline-block px-2">Assign User</h4>
                   {users && users.length > 0 ? (
