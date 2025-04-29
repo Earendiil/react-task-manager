@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { getAllTasks } from "@/api/taskApi";
 import TaskCard from "@/components/Task/TaskCard";
 import { getAllUsers } from "@/api/userApi";
-import { useAuth } from "@/hooks/useAuth";
+
 
 const TaskPage = () => {
   const { userId } = useParams(); // Assuming you get the userId from the URL

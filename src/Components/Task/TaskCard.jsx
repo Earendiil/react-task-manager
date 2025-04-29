@@ -12,7 +12,7 @@ const TaskCard = ({ task, users, setTasks, showAssignUser = true }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [categories, setCategories] = useState([]);
   const [allUsers, setAllUsers] = useState ([]);
-  const { isAdmin } = useAuth();
+  const { isAdmin, user } = useAuth();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -82,7 +82,7 @@ const TaskCard = ({ task, users, setTasks, showAssignUser = true }) => {
 
   return (
     <div className=" rounded-lg shadow-md p-4 mb-4 relative bg-slate-200">
-      {!isEditing && (isAdmin || assignedUsers.some((u) => u.id === users?.id)) && (
+      {!isEditing && (isAdmin || assignedUsers.some((u) => u.id === user?.id)) && (
         <button
           onClick={() => setIsEditing(true)}
           className="absolute top-2 right-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
