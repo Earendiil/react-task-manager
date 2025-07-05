@@ -1,5 +1,5 @@
-import CategoryDetailPage from "@/components/Category/CategoryDetailPage";
-import UserDetailPage from "@/components/User/UserDetailPage";
+
+
 import CategoriesPage from "@/pages/CategoriesPage";
 import DashboardHome from "@/pages/DashboardHome";
 import LoginPage from "@/pages/LoginPage";
@@ -9,6 +9,8 @@ import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import DashboardLayout from "@/components/Dashboard";
 import TaskPage from "@/pages/TasksPage";
+import CategoryDetailPage from "@/components/Category/CategoryDetailPage";
+import UserDetailPage from "@/components/User/UserDetailPage";
 
 
 const AppRoutes = () => {

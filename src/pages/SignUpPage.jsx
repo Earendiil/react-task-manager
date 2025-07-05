@@ -1,3 +1,4 @@
+import axiosClient from "@/api/axiosClient";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -16,29 +17,21 @@ const SignupPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
 
-    try {
-      const response = await fetch("http://localhost:8080/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+  try {
+    const response = await axiosClient.post("/auth/signup", formData);
+    navigate("/login");
+  } catch (err) {
+    console.error("Signup error:", err); // 👈 Add this to debug
 
-      if (!response.ok) {
-        const data = await response.json();
-        setError(data.message || "Signup failed");
-      } else {
-        navigate("/login");
-      }
-    } catch (err) {
-      setError("Something went wrong. Try again later.");
-    }
-  };
+    const message = err.response?.data?.message || "Signup failed";
+    setError(message);
+  }
+};
+
 
   return (
     <div className="flex items-center justify-center h-screen bg-brown-400">
