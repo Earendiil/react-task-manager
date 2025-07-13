@@ -46,67 +46,63 @@ const CategoriesPage = () => {
   
 
   
-  return (
-    <div className="categories-container bg-amber-300">
-      <h2 className="text-2xl font-semibold mb-6">Categories</h2>
-      <div>
-        {isAdmin && ( 
-      <button
-        onClick={() => setIsFormVisible(!isFormVisible)}
-        className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 mb-4"
-      >
-        {isFormVisible ? "Cancel" : "Create Category"}
-      </button>
+ return (
+  <div className="categories-container bg-yellow-800 min-h-screen p-6">
+    <h2 className="text-3xl font-bold mb-8 text-gray-800">Categories</h2>
+    <div className="mb-6">
+      {isAdmin && (
+        <button
+          onClick={() => setIsFormVisible(!isFormVisible)}
+          className="bg-green-600 text-white px-5 py-3 rounded-lg shadow-md hover:bg-green-700 transition-colors mb-4"
+        >
+          {isFormVisible ? "Cancel" : "Create Category"}
+        </button>
       )}
 
       {isFormVisible && (
-        <form onSubmit={handleCreateCategory} className="mb-6">
+        <form onSubmit={handleCreateCategory} className="flex items-center gap-4 mb-8">
           <input
             type="text"
             value={newCategoryName}
             onChange={(e) => setNewCategoryName(e.target.value)}
             placeholder="Category Name"
-            className="border px-4 py-2 rounded-md mr-2"
+            className="flex-grow border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition"
             required
           />
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-colors"
           >
             Save
           </button>
         </form>
       )}
-
-      
-
-
-
-      </div>
-
-      <div className="category-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {loading ? (
-          <p>Loading categories...</p>
-        ) : (
-          categories.map((category) => (
-            <div key={category.categoryId} className="category-card bg-green-200 shadow-lg rounded-lg p-4">
-              <h3 className="text-lg font-semibold mb-2">{category.name}</h3>
-              <p className="text-gray-600">Tasks: {category.tasks.length}</p>
-              <div className="flex justify-between mt-4">
-                <button
-                  onClick={() => handleViewCategory(category.categoryId)}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-                >
-                  View Category
-                </button>
-                {/* Add Edit/Delete functionality here if needed */}
-              </div>
-            </div>
-          ))
-        )}
-      </div>
     </div>
-  );
+
+    <div className="category-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      {loading ? (
+        <p className="text-gray-600 text-center col-span-full">Loading categories...</p>
+      ) : (
+        categories.map((category) => (
+          <div
+            key={category.categoryId}
+            className="category-card bg-green-100 shadow-lg rounded-xl p-6 flex flex-col justify-between"
+          >
+            <h3 className="text-xl font-semibold mb-3 text-gray-900">{category.name}</h3>
+            <p className="text-gray-700 mb-6">Tasks: {category.tasks.length}</p>
+            <button
+              onClick={() => handleViewCategory(category.categoryId)}
+              className="mt-auto bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              View Category
+            </button>
+          </div>
+        ))
+      )}
+    </div>
+  </div>
+);
+
 };
 
 export default CategoriesPage;
