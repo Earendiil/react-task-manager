@@ -1,22 +1,41 @@
-# Use official Node image to build the app
-FROM node:18 AS builder
+# ------------------------------
+# Step 1: Build the React app
+# ------------------------------
+FROM node:20-alpine AS build
+
+# Update packages and install minimal tools (optional)
+RUN apk add --no-cache bash curl git && apk update && apk upgrade --no-cache
 
 WORKDIR /app
-COPY . .
 
-# Inject build-time env var
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Accept optional backend URL for Vite
 ARG VITE_BACKEND_URL
 ENV VITE_BACKEND_URL=$VITE_BACKEND_URL
 
-RUN npm install
+# Copy source and build
+COPY . .
 RUN npm run build
 
-# Use nginx to serve the build files
+# ------------------------------
+# Step 2: Serve with Nginx
+# ------------------------------
 FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy custom nginx config (optional)
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+# Update to reduce vulnerabilities
+RUN apk update && apk upgrade --no-cache
 
-EXPOSE 80
+# Copy built app from previous stage
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Custom Nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Cloud Run expects PORT env var, default to 8080
+ENV PORT=8080
+EXPOSE $PORT
+
 CMD ["nginx", "-g", "daemon off;"]
